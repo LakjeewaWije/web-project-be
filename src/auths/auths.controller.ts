@@ -1,4 +1,10 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { AuthsService } from './auths.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
 
@@ -8,6 +14,12 @@ export class AuthsController {
 
   @Post('/signup')
   async signUpUser(@Body() signUpUserDto: SignUpUserDto, @Req() req: Request) {
-    return { user: 'signed up' };
+    var res = await this.authService.signUpUser(signUpUserDto);
+
+    if (!res) {
+      throw new BadRequestException(`SignUp failed!, Please try again`);
+    }
+
+    return { user: res };
   }
 }

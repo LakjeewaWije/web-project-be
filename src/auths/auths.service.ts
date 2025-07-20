@@ -9,9 +9,9 @@ import { Role } from 'src/role/role.enum';
 
 @Injectable()
 export class AuthsService {
-      constructor(
+  constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
   ) {}
 
   async signUpUser(dto: SignUpUserDto): Promise<User | any> {
