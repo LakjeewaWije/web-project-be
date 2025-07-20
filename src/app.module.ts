@@ -6,8 +6,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import configuration from './config/configuration';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { SuccessResponseFilter } from './utils/success-response.filter';
+import { HttpExceptionFilter } from './utils/http-exception.filter';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -45,6 +46,10 @@ import { SuccessResponseFilter } from './utils/success-response.filter';
     {
       provide: APP_INTERCEPTOR,
       useClass: SuccessResponseFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
     AppService,
   ],
