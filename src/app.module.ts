@@ -9,6 +9,7 @@ import configuration from './config/configuration';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { SuccessResponseFilter } from './utils/success-response.filter';
 import { HttpExceptionFilter } from './utils/http-exception.filter';
+import { AuthsModule } from './auths/auths.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -40,6 +41,7 @@ import { HttpExceptionFilter } from './utils/http-exception.filter';
       },
       inject: [ConfigService],
     }),
+    AuthsModule,
   ],
   controllers: [AppController],
   providers: [
