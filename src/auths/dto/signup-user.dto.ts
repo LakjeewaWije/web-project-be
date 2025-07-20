@@ -7,6 +7,7 @@ import {
   Length,
   Validate,
 } from 'class-validator';
+import { IsValidMobileNumber } from 'src/utils/mobileNumber.validator';
 
 export class SignUpUserDto {
   @IsString()
@@ -29,6 +30,7 @@ export class SignUpUserDto {
   @Transform(({ value }) => value.replace(/\s/g, ''))
   @IsString()
   @IsNotEmpty()
+  @Validate(IsValidMobileNumber)
   @ApiProperty({
     example: '+353899622517',
   })
