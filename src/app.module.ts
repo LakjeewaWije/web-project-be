@@ -42,10 +42,11 @@ import { SuccessResponseFilter } from './utils/success-response.filter';
   ],
   controllers: [AppController],
   providers: [
-        {
+    {
       provide: APP_INTERCEPTOR,
       useClass: SuccessResponseFilter,
     },
-    AppService],
+    AppService,
+  ],
 })
 export class AppModule {}
