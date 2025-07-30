@@ -7,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { AuthsService } from './auths.service';
 import { SignUpUserDto } from './dto/signup-user.dto';
+import { Public } from 'src/utils/publicRequest.decorator';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('auths')
 export class AuthsController {
@@ -21,5 +23,11 @@ export class AuthsController {
     }
 
     return { user: res };
+  }
+
+  @Public()
+  @Post('/login')
+  async logInTrainer(@Body() logInUser: LoginUserDto, @Req() req: Request) {
+    return true;
   }
 }
