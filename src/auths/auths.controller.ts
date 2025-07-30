@@ -28,6 +28,7 @@ export class AuthsController {
   @Public()
   @Post('/login')
   async logInTrainer(@Body() logInUser: LoginUserDto, @Req() req: Request) {
-    return true;
+    let res = await this.authService.logInUser(logInUser);
+    return res;
   }
 }

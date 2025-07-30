@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -6,6 +11,7 @@ import { SignUpUserDto } from './dto/signup-user.dto';
 import * as bcrypt from 'bcrypt';
 import { parsePhoneNumberWithError } from 'libphonenumber-js';
 import { Role } from 'src/role/role.enum';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthsService {
@@ -46,5 +52,37 @@ export class AuthsService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async logInUser(dto: LoginUserDto): Promise<User> {
+    try {
+      const findUser = await this.usersRepository.findOne({
+        where: { mobilePhone: dto.mobilePhone },
+      });
+
+      if (!findUser)
+        throw new NotFoundException(
+          `User with Mobilephone ${dto.mobilePhone} not found!`,
+        );
+
+      const validPassword = await this.comparePasswords(
+        dto.password,
+        findUser.password as any,
+      );
+
+      if (!validPassword)
+        throw new UnauthorizedException('Invalid Credentials');
+
+      return findUser;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async comparePasswords(
+    plainTextPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(plainTextPassword, hashedPassword);
   }
 }
