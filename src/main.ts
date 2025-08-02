@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   initializeTransactionalContext();
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors();
   // register swagger api
   const config = new DocumentBuilder()
     .setTitle('Web Project BE')
