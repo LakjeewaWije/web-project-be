@@ -4,6 +4,7 @@ import { Product } from './entity/product.entity';
 import { Repository } from 'typeorm';
 import { Image } from './entity/image.entity';
 import { ProductDto } from './dto/add-product.dto';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class ProductsService {
@@ -53,6 +54,19 @@ export class ProductsService {
   async getAllProducts(): Promise<Product[]> {
     try {
       const res = await this.productsRepository.find({
+        relations: { images: true },
+      });
+
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getProductById(id: UUID): Promise<Product | any> {
+    try {
+      const res = await this.productsRepository.findOne({
+        where: { productId: id },
         relations: { images: true },
       });
 
