@@ -11,6 +11,7 @@ import { SuccessResponseFilter } from './utils/success-response.filter';
 import { HttpExceptionFilter } from './utils/http-exception.filter';
 import { AuthsModule } from './auths/auths.module';
 import { UsersModule } from './users/users.module';
+import { ProductsModule } from './products/products.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -44,6 +45,7 @@ import { UsersModule } from './users/users.module';
     }),
     AuthsModule,
     UsersModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [
