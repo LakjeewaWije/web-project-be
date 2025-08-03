@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { ProductDto } from './dto/add-product.dto';
 import { ProductsService } from './products.service';
+import { Public } from 'src/utils/publicRequest.decorator';
+import { UUID } from 'crypto';
 
 @Controller('products')
 export class ProductsController {
@@ -24,5 +26,16 @@ export class ProductsController {
   async getAllProducts() {
     var res = await this.productsService.getAllProducts();
     return { products: res };
+  }
+
+  @ApiOperation({
+    summary: 'Get Single Product Detail',
+    description: 'Get single Product detail',
+  })
+  @Public()
+  @Get(`/:productId`)
+  async getProductById(@Param('productId') productId: UUID) {
+    var res = await this.productsService.getProductById(productId);
+    return { product: res };
   }
 }
