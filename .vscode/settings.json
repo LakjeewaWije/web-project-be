@@ -1,0 +1,10 @@
+{
+  "eslint.options": {
+    "overrideConfig": {
+      "rules": {
+        "no-useless-catch": "off",
+        "no-unsafe-assignment": "true"
+      }
+    }
+  }
+}
