@@ -4,6 +4,7 @@ import { Product } from './entity/product.entity';
 import { Repository } from 'typeorm';
 import { Image } from './entity/image.entity';
 import { ProductDto } from './dto/add-product.dto';
+
 @Injectable()
 export class ProductsService {
   constructor(
@@ -44,6 +45,18 @@ export class ProductsService {
       });
 
       return final;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    try {
+      const res = await this.productsRepository.find({
+        relations: { images: true },
+      });
+
+      return res;
     } catch (error) {
       throw error;
     }
