@@ -13,7 +13,6 @@ import {
 import { UUID } from 'crypto';
 
 export class UpdateUserDto {
-
   @IsString()
   @IsOptional()
   @ApiProperty()
