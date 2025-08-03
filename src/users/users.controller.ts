@@ -1,9 +1,13 @@
-import { Body, Controller, Put, Req } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { Body, Controller, Put, Req, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from 'src/auths/auth.guard';
+import { RolesGuard } from 'src/role/roles.guard';
 
 @Controller('users')
+@ApiBearerAuth()
+@UseGuards(AuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
