@@ -13,9 +13,8 @@ export class UsersController {
   })
   @Put('/update')
   async updateUser(@Body() dto: UpdateUserDto, @Req() req: Request) {
-    const userId = dto.userId;
+    const userId = req['user'].userId;
     const res = await this.usersService.updateUser(dto, userId);
-
     return { user: res };
   }
 }
