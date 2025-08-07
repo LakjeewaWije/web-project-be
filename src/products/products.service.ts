@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { Image } from './entity/image.entity';
 import { ProductDto } from './dto/add-product.dto';
 import { UUID } from 'crypto';
+import {EnumDto } from 'src/utils/enum.dto';
+import { InstrumentBrands } from 'src/utils/brandTypes.enum';
 
 @Injectable()
 export class ProductsService {
@@ -71,6 +73,21 @@ export class ProductsService {
       });
 
       return res;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+    async getAllBrandTypes(): Promise<EnumDto[]> {
+    try {
+      const enumValues = Object.keys(InstrumentBrands)
+        .filter((key) => typeof InstrumentBrands[key] === 'number')
+        .map((key) => ({
+          key,
+          value: InstrumentBrands[key],
+        }));
+
+      return enumValues;
     } catch (error) {
       throw error;
     }
