@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { Public } from 'src/utils/publicRequest.decorator';
 import { UUID } from 'crypto';
 import { AuthGuard } from 'src/auths/auth.guard';
 import { RolesGuard } from 'src/role/roles.guard';
+import { GetProductDto } from './query/get-product.dto';
 
 @Controller('products')
 @ApiBearerAuth()
@@ -49,5 +51,16 @@ export class ProductsController {
   async getProductById(@Param('productId') productId: UUID) {
     var res = await this.productsService.getProductById(productId);
     return { product: res };
+  }
+
+  @ApiOperation({
+    summary: 'Get all products filter',
+    description: 'Get all products filter',
+  })
+  @Public()
+  @Get('/get/filter')
+  async getAllFilter(@Query() queryParams: GetProductDto) {
+    var res = await this.productsService.getAllProductsFilter(queryParams);
+    return res;
   }
 }
