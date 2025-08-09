@@ -4,9 +4,7 @@ export enum InstrumentCategories {
   FLUTE = 3,
   VIOLIN = 4,
   MANDOLIN = 5,
-  SAXAPHONE = 6,
+  PIANO = 6,
   HARMONICA = 7,
-  HARP = 8,
-  PIANO = 9,
-  ACCORDIAN = 10,
+  SAXAPHONE = 8,
 }

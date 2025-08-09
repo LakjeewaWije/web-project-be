@@ -74,4 +74,15 @@ export class ProductsController {
     var res = await this.productsService.getAllBrandTypes();
     return { brandTypes: res };
   }
+
+  @ApiOperation({
+    summary: 'Get all category types',
+    description: 'Get all category types',
+  })
+  @Get('/category/types')
+  async getCategoryTypes() {
+    var res = await this.productsService.getAllCategoryTypes();
+    return { categoryTypes: res };
+  }
+
 }
