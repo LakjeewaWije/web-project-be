@@ -1,12 +1,24 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { UUID } from 'crypto';
 import { Role } from 'src/role/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
 import { OrdersService } from './orders.service';
 import { CheckoutDto } from './dto/checkout.dto';
+import { AuthGuard } from 'src/auths/auth.guard';
+import { RolesGuard } from 'src/role/roles.guard';
 
 @Controller('orders')
+@ApiBearerAuth()
+@UseGuards(AuthGuard, RolesGuard)
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
@@ -17,8 +29,10 @@ export class OrdersController {
   @Roles(Role.Client)
   @Post(`/checkout`)
   async submitOrder(@Body() dto: CheckoutDto, @Req() req: Request) {
+    console.log('req', req['user']);
     const userId = req['user'].userId;
-    return { order: true };
+    var res = await this.ordersService.checkoutOrder(dto, userId);
+    return { order: res };
   }
 
   @ApiOperation({
