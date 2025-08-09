@@ -1,13 +1,26 @@
-import { Controller, Get, Param, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { UUID } from 'crypto';
 import { Role } from 'src/role/role.enum';
 import { Roles } from 'src/utils/roles.decorator';
 import { OrdersService } from './orders.service';
+import { CheckoutDto } from './dto/checkout.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
+
+  @ApiOperation({
+    summary: 'Checkout Order',
+    description: 'Checkout order',
+  })
+  @Roles(Role.Client)
+  @Post(`/checkout`)
+  async submitOrder(@Body() dto: CheckoutDto, @Req() req: Request) {
+    const userId = req['user'].userId;
+    return { order: true };
+  }
+
   @ApiOperation({
     summary: 'Get all products by user',
     description: 'Get all products by user',
