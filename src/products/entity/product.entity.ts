@@ -11,6 +11,7 @@ import {
 import { Image } from './image.entity';
 import { InstrumentCategories } from 'src/utils/categoryTypes.enum';
 import { InstrumentBrands } from 'src/utils/brandTypes.enum';
+import { OrderToProductEntity } from 'src/orders/entity/order-to-product.entity';
 
 @Entity()
 export class Product {
@@ -61,4 +62,10 @@ export class Product {
 
   @OneToMany(() => Image, (image) => image.product)
   images?: Image[];
+
+  @OneToMany(
+    () => OrderToProductEntity,
+    (orderToProduct) => orderToProduct.order,
+  )
+  public orderToProducts?: OrderToProductEntity[];
 }

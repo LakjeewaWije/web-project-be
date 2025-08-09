@@ -12,6 +12,7 @@ import { HttpExceptionFilter } from './utils/http-exception.filter';
 import { AuthsModule } from './auths/auths.module';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
+import { OrdersModule } from './orders/orders.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -46,6 +47,7 @@ import { ProductsModule } from './products/products.module';
     AuthsModule,
     UsersModule,
     ProductsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [

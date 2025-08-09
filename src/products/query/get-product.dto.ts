@@ -12,6 +12,7 @@ import {
 import { Role } from 'src/role/role.enum';
 import { InstrumentCategories } from 'src/utils/categoryTypes.enum';
 import { InstrumentBrands } from 'src/utils/brandTypes.enum';
+
 export class GetProductDto {
   @ApiProperty({ required: false, enum: InstrumentCategories })
   @IsOptional()
