@@ -63,4 +63,15 @@ export class ProductsController {
     var res = await this.productsService.getAllProductsFilter(queryParams);
     return res;
   }
+  
+  @ApiOperation({
+    summary: 'Get all brand types',
+    description: 'Get all brand types',
+  })
+  @Public()
+  @Get('/brand/types')
+  async getBrandTypes() {
+    var res = await this.productsService.getAllBrandTypes();
+    return { brandTypes: res };
+  }
 }
