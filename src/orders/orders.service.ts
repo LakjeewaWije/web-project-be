@@ -49,4 +49,59 @@ export class OrdersService {
       throw error;
     }
   }
+
+  @Transactional()
+  async checkoutOrder(dto: CheckoutDto, userId: UUID): Promise<any> {
+    try {
+      // get user
+      const getUser = await this.usersRepository.findOne({
+        where: { userId },
+      });
+
+      if (!getUser) throw new NotFoundException('User Not Found');
+
+      // add order
+      const orderDao: OrderEntity = {
+        user: getUser,
+        recipientFirstName: dto.recipientFirstName,
+        recipientLastName: dto.recipientLastName,
+        recipientMobilePhone: dto.recipientMobilePhone,
+        recipientEircode: dto.recipientEircode,
+      };
+
+      const orderRes = await this.ordersRepository.save(orderDao);
+      let total = 0;
+      for (const item of dto.items) {
+        const productRes = await this.productsRepository.findOne({
+          where: { productId: item.productId },
+        });
+
+        if (!productRes) throw new NotFoundException('Product Not Found');
+
+        total = total + parseFloat(productRes.price.toString()) * item.quantity;
+
+        const orderToProductDao: OrderToProductEntity = {
+          quantity: item.quantity,
+          product: productRes,
+          order: orderRes,
+        };
+
+        await this.orderToProductRepository.save(orderToProductDao);
+      }
+
+      await this.ordersRepository.save({
+        ...orderRes,
+        total,
+      });
+
+      const res = await this.ordersRepository.find({
+        where: { orderId: orderRes.orderId },
+        relations: { user: true, orderToProducts: { product: true } },
+      });
+
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
