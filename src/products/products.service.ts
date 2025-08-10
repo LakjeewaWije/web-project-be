@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entity/product.entity';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { Image } from './entity/image.entity';
 import { ProductDto } from './dto/add-product.dto';
 import { UUID } from 'crypto';
+import { GetProductDto } from './query/get-product.dto';
+import { EnumDto } from 'src/utils/enum.dto';
+import { InstrumentBrands } from 'src/utils/brandTypes.enum';
+import { InstrumentCategories } from 'src/utils/categoryTypes.enum';
 
 @Injectable()
 export class ProductsService {
@@ -71,6 +75,80 @@ export class ProductsService {
       });
 
       return res;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllProductsFilter(
+    queryParams?: GetProductDto,
+  ): Promise<{ products: Product[]; totalCount: number }> {
+    const options: FindManyOptions<Product> = {
+      relations: { images: true },
+    };
+    console.log('Ohhbhai firsttttt');
+    if (queryParams) {
+      if (queryParams.productBrand) {
+        options.where = {
+          ...options.where,
+          productBrand: queryParams.productBrand,
+        };
+      }
+
+      if (queryParams.productCategory) {
+        options.where = {
+          ...options.where,
+          productCategory: queryParams.productCategory,
+        };
+      }
+
+      // Apply sorting based on query parameter
+      // if (queryParams.sort) {
+      //   const [sortField, sortOrder] = queryParams.sort.split(',');
+      //   options.order = { [sortField]: sortOrder.toUpperCase() };
+      // }
+
+      if (queryParams.pageNumber && queryParams.pageSize) {
+        const { pageNumber, pageSize } = queryParams;
+        const skip = (pageNumber - 1) * pageSize;
+        options.skip = skip;
+        options.take = pageSize;
+      }
+    }
+
+    const [products, totalCount] = await Promise.all([
+      this.productsRepository.find(options),
+      this.productsRepository.count(options),
+    ]);
+
+    return { products: products, totalCount };
+  }
+
+  async getAllBrandTypes(): Promise<EnumDto[]> {
+    try {
+      const enumValues = Object.keys(InstrumentBrands)
+        .filter((key) => typeof InstrumentBrands[key] === 'number')
+        .map((key) => ({
+          key,
+          value: InstrumentBrands[key],
+        }));
+
+      return enumValues;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllCategoryTypes(): Promise<EnumDto[]> {
+    try {
+      const enumValues = Object.keys(InstrumentCategories)
+        .filter((key) => typeof InstrumentCategories[key] === 'number')
+        .map((key) => ({
+          key,
+          value: InstrumentCategories[key],
+        }));
+
+      return enumValues;
     } catch (error) {
       throw error;
     }
