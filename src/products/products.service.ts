@@ -6,6 +6,9 @@ import { Image } from './entity/image.entity';
 import { ProductDto } from './dto/add-product.dto';
 import { UUID } from 'crypto';
 import { GetProductDto } from './query/get-product.dto';
+import { EnumDto } from 'src/utils/enum.dto';
+import { InstrumentBrands } from 'src/utils/brandTypes.enum';
+import { InstrumentCategories } from 'src/utils/categoryTypes.enum';
 
 @Injectable()
 export class ProductsService {
@@ -119,5 +122,35 @@ export class ProductsService {
     ]);
 
     return { products: products, totalCount };
+  }
+
+  async getAllBrandTypes(): Promise<EnumDto[]> {
+    try {
+      const enumValues = Object.keys(InstrumentBrands)
+        .filter((key) => typeof InstrumentBrands[key] === 'number')
+        .map((key) => ({
+          key,
+          value: InstrumentBrands[key],
+        }));
+
+      return enumValues;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllCategoryTypes(): Promise<EnumDto[]> {
+    try {
+      const enumValues = Object.keys(InstrumentCategories)
+        .filter((key) => typeof InstrumentCategories[key] === 'number')
+        .map((key) => ({
+          key,
+          value: InstrumentCategories[key],
+        }));
+
+      return enumValues;
+    } catch (error) {
+      throw error;
+    }
   }
 }
