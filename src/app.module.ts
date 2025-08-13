@@ -13,6 +13,7 @@ import { AuthsModule } from './auths/auths.module';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
+import { MailerModule } from './mailer/mailer.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -48,6 +49,7 @@ import { OrdersModule } from './orders/orders.module';
     UsersModule,
     ProductsModule,
     OrdersModule,
+    MailerModule,
   ],
   controllers: [AppController],
   providers: [
