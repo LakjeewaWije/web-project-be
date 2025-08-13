@@ -6,6 +6,7 @@ import { User } from 'src/users/entity/user.entity';
 import { Product } from 'src/products/entity/product.entity';
 import { OrderToProductEntity } from './entity/order-to-product.entity';
 import { OrderEntity } from './entity/order.entity';
+import { MailerModule } from 'src/mailer/mailer.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { OrderEntity } from './entity/order.entity';
       User,
       Product,
     ]),
+    MailerModule,
   ],
   controllers: [OrdersController],
   providers: [OrdersService],

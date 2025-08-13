@@ -8,6 +8,7 @@ import { User } from 'src/users/entity/user.entity';
 import { OrderToProductEntity } from './entity/order-to-product.entity';
 import { CheckoutDto } from './dto/checkout.dto';
 import { Transactional } from 'typeorm-transactional';
+import { MailerService } from 'src/mailer/mailer.service';
 
 @Injectable()
 export class OrdersService {
@@ -20,6 +21,7 @@ export class OrdersService {
     private usersRepository: Repository<User>,
     @InjectRepository(OrderToProductEntity)
     private orderToProductRepository: Repository<OrderToProductEntity>,
+    private readonly mailerService: MailerService,
   ) {}
 
   async getAllOrders(userId: UUID): Promise<OrderEntity[]> {
@@ -98,6 +100,18 @@ export class OrdersService {
         where: { orderId: orderRes.orderId },
         relations: { user: true, orderToProducts: { product: true } },
       });
+
+      // Send email to the user after the order is placed, using emailAddress
+      if (getUser.emailAddress) {
+        await this.mailerService.sendOrderConfirmationEmail(
+          getUser.emailAddress,
+          res[0],
+        );
+      } else {
+        console.warn(
+          'User email address not found, skipping email notification',
+        );
+      }
 
       return res;
     } catch (error) {
